@@ -1,0 +1,73 @@
+<div id="consent-banner">
+  <div class="consent-inner">
+    <p>We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.</p>
+    <div>
+      <button id="accept-consent" class="button button--samll" style="margin-right: 10px;">Accept</button>
+      <button id="reject-consent" class="button button--small">Reject</button>
+    </div>
+  </div>
+</div>
+<style>
+  #consent-banner {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1); 
+  }
+  .consent-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+  @media screen and (min-width: 750px) {
+     .consent-inner {
+      flex-direction: row;
+    }
+  }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+  var consentBanner = document.getElementById('consent-banner');
+  var acceptButton = document.getElementById('accept-consent');
+  var rejectButton = document.getElementById('reject-consent');
+
+  // Check if consent has already been given
+  var consent = localStorage.getItem('user_consent');
+  if (consent) {
+    gtag('consent', 'update', JSON.parse(consent));
+    consentBanner.style.display = 'none';
+  } else {
+    consentBanner.style.display = 'block';
+  }
+
+  acceptButton.addEventListener('click', function () {
+    var consentData = {
+      ad_storage: 'granted',
+      analytics_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
+    };
+    gtag('consent', 'update', consentData);
+    localStorage.setItem('user_consent', JSON.stringify(consentData));
+    consentBanner.style.display = 'none';
+  });
+
+  rejectButton.addEventListener('click', function () {
+    var consentData = {
+      ad_storage: 'denied',
+      analytics_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+    };
+    gtag('consent', 'update', consentData);
+    localStorage.setItem('user_consent', JSON.stringify(consentData));
+    consentBanner.style.display = 'none';
+  });
+});
+
+</script>
